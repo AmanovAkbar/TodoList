@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+
+<div class="login-form">
+
+    <h1>Login</h1>
+    <div class="content">
+      <div class="input-field">
+        <input id = "username-input" type="text" name="usr_name" placeholder="Username">
+      </div>
+      <div class="input-field">
+        <input id="password-input" name="pass_word" type="password" placeholder="Password">
+      </div>
+
+    </div>
+    <div class="action">
+      <button onclick="register()">Register</button>
+      <button onclick="signin()">Sign in</button>
+    </div>
+
+</div>
+
+
+
+
+</body>
+<script>
+
+  async function signin() {
+    let username = document.getElementById("username-input").value;
+    let password = document.getElementById("password-input").value;
+
+    //alert(username);
+    //alert(password);
+    let formData = new FormData();
+
+    let obj;
+    await fetch("http://localhost:8080/auth/login", {
+
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify( {
+
+        "username": username,
+        "password": password,
+
+      } )
+    }).then(result => result.text()).then(text => obj=text);
+   // alert(obj);
+    let jsObj = JSON.parse(obj);
+
+    if (username === jsObj.username) {
+      //alert("success");
+      localStorage.setItem("user", JSON.stringify(jsObj));
+      //const localstorage_user = JSON.parse(localStorage.getItem('user'))
+      //const inMemoryToken = localstorage_user.accessToken;
+      window.location.href = "http://localhost:8080/index.html";
+
+    }
+  }
+  async function register(){
+    let username = document.getElementById("username-input").value;
+    let password = document.getElementById("password-input").value;
+   // alert(username);
+    //alert(password);
+    await fetch("http://localhost:8080/auth/signup",{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: {
+        "username": username,
+        "password": password
+      }
+    }).then(result=> result.text()).then(text=> alert(text));
+    await login(username, password);
+  }
+  async function login(username, password) {
+
+    let obj;
+   // alert(username);
+   // alert(password);
+    await fetch("http://localhost:8080/auth/login", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: {
+        "username": username,
+        "password": password
+      }
+    }).then(result => result.text()).then(text => obj = text);
+    let jsObj = JSON.parse(obj);
+    if (username === jsObj.username) {
+      //alert("success");
+      localStorage.setItem("user", JSON.stringify(jsObj));
+      //const localstorage_user = JSON.parse(localStorage.getItem('user'))
+      //const inMemoryToken = localstorage_user.accessToken;
+      window.location.href = "http://localhost:8080/index.html";
+
+    }
+  }
+</script>
+</html>

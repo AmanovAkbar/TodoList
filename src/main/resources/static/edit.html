@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit</title>
+</head>
+<body>
+<input id="edit-input" name="edit-input" type="text" placeholder="Write new todo value...">
+<button onclick="edit()">Edit</button>
+</body>
+<script>
+
+    function getParameterByName(name, url = window.location.href) {
+        name = name.replace(/[\[\]]/g, '\\$&');
+        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    }
+    async function edit(){
+        let localstorage_user = JSON.parse(localStorage.getItem("user"));
+        let token = localstorage_user.accessToken;
+
+        let url = getParameterByName("url");
+        let newValue = document.getElementById("edit-input").value;
+
+        await fetch(url + "/edit", {
+            headers:{
+                'Authorization': 'Bearer '+token
+            },
+            method: 'PUT',
+            body: newValue
+        }).then(result=> result.text()).then(text=>alert(text));
+        window.location.href = "localhost:8080/"
+
+    }
+</script>
+</html>

@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ToDoList</title>
+    <style>
+        /* Include the padding and border in an element's total width and height */
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Remove margins and padding from the list */
+        ul {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Style the list items */
+        ul li {
+            cursor: pointer;
+            position: relative;
+            padding: 12px 8px 12px 40px;
+            background: #eee;
+            font-size: 18px;
+            transition: 0.2s;
+
+            /* make the list items unselectable */
+            -webkit-person-select: none;
+            -moz-person-select: none;
+            -ms-person-select: none;
+            person-select: none;
+        }
+
+        /* Set all odd list items to a different color (zebra-stripes) */
+        ul li:nth-child(odd) {
+            background: #f9f9f9;
+        }
+
+        /* Darker background-color on hover */
+        ul li:hover {
+            background: #ddd;
+        }
+
+        /* When clicked on, add a background color and strike out text */
+        ul li.checked {
+            background: #888;
+            color: #fff;
+            text-decoration: line-through;
+        }
+
+        /* Add a "checked" mark when clicked on */
+        ul li.checked::before {
+            content: '';
+            position: absolute;
+            border-color: #fff;
+            border-style: solid;
+            border-width: 0 2px 2px 0;
+            top: 10px;
+            left: 16px;
+            transform: rotate(45deg);
+            height: 15px;
+            width: 7px;
+        }
+
+        /* Style the close button */
+
+
+
+        /* Style the header */
+        .header {
+            background-color: #f44336;
+            padding: 30px 40px;
+            color: white;
+            text-align: center;
+        }
+
+        /* Clear floats after the header */
+        .header:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        .done:hover{
+            background-color: #f44336;
+            color: white;
+        }
+        .remove:hover{
+            background-color: #f44336;
+            color: white;
+        }
+        .deleteBtn:hover{
+            background-color: #f44336;
+            color: white;
+        }
+        .deleteFile:hover{
+            background-color: #f44336;
+            color: white;
+        }
+        .done  {
+            position: absolute;
+            right: 0;
+            top: -2.5px;
+            padding: 12px 16px 12px 16px;
+
+            color: #555;
+            float: left;
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 0;
+        }
+        .deleteFile{
+            position: absolute;
+            right: 160px;
+            top: 0;
+            padding: 12px 16px 12px 16px;
+
+            color: #555;
+            float: left;
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 0;
+        }
+        .edit{
+            position: absolute;
+            right: 200px;
+            top: 0px;
+            padding: 12px 16px 12px 16px;
+
+            color: #555;
+            float: left;
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 0;
+        }
+        .edit:hover{
+            background-color: #f44336;
+            color: white;
+        }
+
+        .remove{
+            position: absolute;
+            right: 40px;
+            top: 0px;
+            padding: 12px 16px 12px 16px;
+
+            color: #555;
+            float: left;
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 0;
+        }
+        .deleteBtn{
+            position: absolute;
+            right: 80px;
+            top: -3px;
+            padding: 12px 16px 12px 16px;
+
+            color: #555;
+            float: left;
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 0;
+        }
+        .fileBtn{
+            position: absolute;
+            right: 120px;
+            top: 0;
+            padding: 12px 16px 12px 16px;
+
+            color: #555;
+            float: left;
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 0;
+        }
+        .fileBtn:hover{
+            background-color: #f44336;
+            color: white;
+        }
+        /* Style the input */
+        input {
+            margin: 0;
+            border: none;
+            border-radius: 0;
+            width: 75%;
+            padding: 10px;
+            float: left;
+            font-size: 16px;
+        }
+
+        /* Style the "Add" button */
+        .addBtn {
+            padding: 10px;
+            width: 25%;
+            background: #d9d9d9;
+            color: #555;
+            float: left;
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 0;
+        }
+
+        .addBtn:hover {
+            background-color: #bbb;
+        }
+
+    </style>
+</head>
+<body>
+<div id="myDIV" class="header">
+    <h2>My To Do List</h2>
+    <input type="text" id="myInput" placeholder="Title...">
+    <span onclick="newElement()" class="addBtn" id="add-button">Add</span>
+    <span  class="addBtn" style="display: none" id="edit-button">Edit</span>
+    <br>
+    <span onclick="showAllToDos()" class = "addBtn">Show All</span>
+    <span onclick="showNotDoneToDos()" class = "addBtn">Show not Done</span>
+    <span onclick="showDoneTodos()" class = "addBtn">Show Done</span>
+    <span onclick="showTrashBin()" class = "addBtn">Show Removed</span>
+</div>
+<div>
+
+</div>
+<ul id="myUL">
+
+
+
+</ul>
+<!-- <a href="login.html">log in</a> -->
+</body>
+<script>
+async function newElement(){
+    let localstorage_user = JSON.parse(localStorage.getItem("user"));
+    let userid = localstorage_user.id;
+    let token = localstorage_user.accessToken;
+
+    let formData = new FormData();
+    let inputValue = document.getElementById("myInput").value;
+    formData.append("description", inputValue);
+    await fetch('http://localhost:8080/'+userid+'/todo', {
+        headers:{
+            'Authorization': 'Bearer ' + token
+        },
+        method:'POST',
+        body: formData
+    }).then(result=> result.text()).then(text=>alert(text));
+    await showAllToDos();
+}
+
+async function showTrashBin() {
+    let localstorage_user = JSON.parse(localStorage.getItem("user"));
+    let userid = localstorage_user.id;
+    let token = localstorage_user.accessToken;
+    let obj;
+    await fetch('http://localhost:8080/'+userid +'/trashbin', {
+        headers:{
+          'Authorization': 'Bearer '+token
+        },
+        method: 'GET'
+    }).then(result => result.text()).then(text => obj = text);
+    let jsObj = JSON.parse(obj);
+
+    let ul = document.getElementById('myUL');
+    ul.innerHTML = "";
+    for (let i = 0; i < jsObj.length; ++i) {
+        let description = jsObj[i].description;
+        let status = jsObj[i].status;
+        let uri = jsObj[i].uri;
+        let li = document.createElement("li");
+        let t = document.createTextNode(description);
+        li.appendChild(t);
+        let check = document.createElement("SPAN");
+        let checktxt = document.createTextNode("\u2713");
+        if (status == 1) {
+            li.classList.toggle("checked");
+        }
+        check.className = "done"
+        check.appendChild(checktxt);
+        check.onclick = async function (){
+            if(status==1){
+                await fetch(uri + "/notdone", {
+                    headers:{
+                        'Authorization': 'Bearer '+token
+                    },
+                    method: 'PUT'
+                } ).then(result=> result.text()).then(text=>alert(text));
+                await showTrashBin();
+            }else{
+                await fetch(uri + "/done", {
+                    headers:{
+                        'Authorization': 'Bearer '+token
+                    },
+                    method: 'PUT'
+                } ).then(result=> result.text()).then(text=>alert(text));
+                await showTrashBin();
+            }
+        }
+        let remove = document.createElement("SPAN");
+        let txt = document.createTextNode("\u00D7");
+        remove.className = "remove";
+        remove.appendChild(txt);
+        remove.onclick = async function(){
+            await fetch(uri + "/recover",{
+                headers:{
+                    'Authorization': 'Bearer '+token
+                },
+                method: 'PUT'
+            }).then(result=> result.text()).then(text=>alert(text));
+            await showTrashBin();
+        }
+        let deleteBtn = document.createElement("SPAN");
+        let deleteTxt = document.createTextNode("\u2421");
+        deleteBtn.className = "deleteBtn";
+        deleteBtn.appendChild(deleteTxt);
+        deleteBtn.onclick = async function(){
+            await fetch(uri,{
+                headers:{
+                    'Authorization': 'Bearer '+token
+                },
+                method: 'DELETE'
+            }).then(result=> result.text()).then(text=>alert(text));
+            await showTrashBin();
+        }
+
+        li.appendChild(check);
+        li.appendChild(remove);
+        li.appendChild(deleteBtn);
+        ul.appendChild(li);
+
+    }
+}
+async function showDoneTodos(){
+    let localstorage_user = JSON.parse(localStorage.getItem("user"));
+    let userid = localstorage_user.id;
+    let token = localstorage_user.accessToken;
+    let obj;
+    await fetch('http://localhost:8080/'+userid+'/donetodo', {
+        headers:{
+            'Authorization': 'Bearer '+token
+        },
+        method: 'GET'
+    }).then(result=>result.text()).then(text=>obj=text);
+    let jsObj = JSON.parse(obj);
+
+    let ul = document.getElementById('myUL');
+    ul.innerHTML="";
+    for(let i = 0; i < jsObj.length; ++i){
+        let description = jsObj[i].description;
+        let status = jsObj[i].status;
+        let uri = jsObj[i].uri;
+
+        let li = document.createElement("li");
+        let t = document.createTextNode(description);
+        li.appendChild(t);
+        let check = document.createElement("SPAN");
+        let checktxt = document.createTextNode("\u2713");
+        check.onclick = async function (){
+            if(status==1){
+                await fetch(uri + "/notdone", {
+                    headers:{
+                        'Authorization': 'Bearer '+token
+                    },
+                    method: 'PUT'
+                } ).then(result=> result.text()).then(text=>alert(text));
+                await showDoneTodos();
+            }else{
+                await fetch(uri + "/done", {
+                    headers:{
+                        'Authorization': 'Bearer '+token
+                    },
+                    method: 'PUT'
+                } ).then(result=> result.text()).then(text=>alert(text));
+                await showDoneTodos();
+            }
+        }
+        li.classList.toggle("checked");
+        check.className="done"
+        check.appendChild(checktxt);
+        let remove = document.createElement("SPAN");
+        let txt = document.createTextNode("\u00D7");
+        remove.className = "remove";
+        remove.appendChild(txt);
+        remove.onclick = async function(){
+            await fetch(uri + "/remove",{
+                headers:{
+                    'Authorization': 'Bearer '+token
+                },
+                method: 'PUT'
+            }).then(result=> result.text()).then(text=>alert(text));
+            await showDoneTodos();
+        }
+        li.appendChild(check);
+        li.appendChild(remove);
+        ul.appendChild(li);
+        let obj2;
+
+        await fetch( uri + "/file",{
+            headers:{
+                'Authorization': 'Bearer '+token
+            },
+            method: 'GET'
+
+        }).then(result=>result.text()).then(text=>obj2=text).catch((error)=>console.error(error));
+        let jsObj1 = JSON.parse(obj2);
+
+        if(jsObj1.filename!=null){
+
+
+
+            let filename=jsObj1.filename;
+            let url = jsObj1.url;
+            let type = jsObj1.type;
+            let downloadBtn = document.createElement("SPAN");
+            let downLoadTxt = document.createTextNode("\u21e9")
+            downloadBtn.appendChild(downLoadTxt);
+            downloadBtn.className="fileBtn";
+            downloadBtn.onclick =  async function () {
+                window.location.href = url;
+                await showDoneTodos();
+            }
+            li.appendChild(downloadBtn);
+            let deleteFile = document.createElement("SPAN");
+            let deleteTxt = document.createTextNode("\u274c")
+            deleteFile.appendChild(deleteTxt);
+            deleteFile.className="deleteFile";
+            deleteFile.onclick =  async function () {
+                fetch(url,{
+                    headers:{
+                        'Authorization': 'Bearer '+token
+                    },
+                    method:'DELETE'
+                }).then(result=>result.text()).then(text=>alert(text));
+                showDoneTodos();
+            }
+            li.appendChild(deleteFile);
+        }else{
+            let downloadBtn = document.createElement("INPUT");
+            let downloadLabel = document.createElement("label");
+            downloadLabel.className ="fileBtn";
+            downloadBtn.style.display = 'none';
+            downloadBtn.setAttribute("name", "uploadBtn");
+            downloadBtn.setAttribute("type", "file");
+            let downLoadTxt = document.createTextNode("\u21e7");
+            downloadLabel.appendChild(downLoadTxt);
+
+            downloadBtn.id="uploadBtn";
+
+            const onSelectFile = async function () {
+                let formData = new FormData();
+                formData.append("file", downloadBtn.files[0]);
+                await fetch(uri + "/file", {
+                    headers:{
+                        'Authorization': 'Bearer '+token
+                    },
+                    method:'POST',
+                    body: formData
+                }).then(result=> result.text()).then(text=> alert(text));
+
+                await showDoneTodos()();
+            }
+            downloadBtn.addEventListener('change', onSelectFile, false);
+            downloadLabel.appendChild(downloadBtn);
+            li.appendChild(downloadLabel);
+        }
+        // let edit = document.createElement('span');
+        // let editT = document.createTextNode("E");
+        // edit.className = "edit";
+        // edit.appendChild(editT);
+        // edit.onclick = function(){
+        //     document.getElementById("myUL").style.visibility="hidden";
+        //     let btns = document.getElementsByClassName("addBtn")
+        //     for(let i = 0; i < btns.length; ++i){
+        //         btns[i].style.visibility="hidden";
+        //     }
+        //     document.getElementById("add-button").style.display="none";
+        //     document.getElementById("edit-button").style.display="inline";
+        //     editTodo(uri);
+        //     document.getElementById("myUL").style.visibility="visible";
+        //     for(let i = 0; i < btns.length; ++i){
+        //         btns[i].style.visibility="visible";
+        //     }
+        //     document.getElementById("add-button").style.display="inline";
+        //     document.getElementById("edit-button").style.display="none";
+        //     showAllToDos();
+        // }
+        // li.appendChild(edit);
+    }
+
+}
+
+async function showNotDoneToDos(){
+    let localstorage_user = JSON.parse(localStorage.getItem("user"));
+    let userid = localstorage_user.id;
+    let token = localstorage_user.accessToken;
+    let obj;
+    await fetch('http://localhost:8080/'+userid+'/notdonetodo', {
+        headers:{
+            'Authorization': 'Bearer '+token
+        },
+        method: 'GET'
+    }).then(result=>result.text()).then(text=>obj=text);
+    let jsObj = JSON.parse(obj);
+
+    let ul = document.getElementById('myUL');
+    ul.innerHTML="";
+    for(let i = 0; i < jsObj.length; ++i){
+        let description = jsObj[i].description;
+        let status = jsObj[i].status;
+        let uri = jsObj[i].uri;
+        let li = document.createElement("li");
+        let t = document.createTextNode(description);
+        li.appendChild(t);
+        let check = document.createElement("SPAN");
+        let checktxt = document.createTextNode("\u2713");
+        check.className="done"
+        check.appendChild(checktxt);
+        check.onclick = async function (){
+            if(status==1){
+                await fetch(uri + "/notdone", {
+                    headers:{
+                        'Authorization': 'Bearer '+token
+                    },
+                    method: 'PUT'
+                } ).then(result=> result.text()).then(text=>alert(text));
+                await showNotDoneToDos();
+            }else{
+                await fetch(uri + "/done", {
+                    headers:{
+                        'Authorization': 'Bearer '+token
+                    },
+                    method: 'PUT'
+                } ).then(result=> result.text()).then(text=>alert(text));
+                await showNotDoneToDos();
+            }
+        }
+        let remove = document.createElement("SPAN");
+        let txt = document.createTextNode("\u00D7");
+        remove.className = "remove";
+        remove.appendChild(txt);
+        remove.onclick = async function(){
+            await fetch(uri + "/remove",{
+                headers:{
+                    'Authorization': 'Bearer '+token
+                },
+                method: 'PUT'
+            }).then(result=> result.text()).then(text=>alert(text));
+            await showNotDoneToDos();
+        }
+        li.appendChild(check);
+        li.appendChild(remove);
+        ul.appendChild(li);
+
+        let obj2;
+
+        await fetch( uri + "/file",{
+            headers:{
+                'Authorization': 'Bearer '+token
+            },
+            method: 'GET'
+
+        }).then(result=>result.text()).then(text=>obj2=text).catch((error)=>console.error(error));
+        let jsObj1 = JSON.parse(obj2);
+
+        if(jsObj1.filename!=null){
+
+
+
+            let filename=jsObj1.filename;
+            let url = jsObj1.url;
+            let type = jsObj1.type;
+            let downloadBtn = document.createElement("SPAN");
+            let downLoadTxt = document.createTextNode("\u21e9")
+            downloadBtn.appendChild(downLoadTxt);
+            downloadBtn.className="fileBtn";
+            downloadBtn.onclick =  async function () {
+                window.location.href = url;
+                await showNotDoneToDos();
+            }
+            li.appendChild(downloadBtn);
+            let deleteFile = document.createElement("SPAN");
+            let deleteTxt = document.createTextNode("\u274c")
+            deleteFile.appendChild(deleteTxt);
+            deleteFile.className="deleteFile";
+            deleteFile.onclick =  async function () {
+                fetch(url,{
+                    headers:{
+                        'Authorization': 'Bearer '+token
+                    },
+                    method:'DELETE'
+                }).then(result=>result.text()).then(text=>alert(text));
+                showNotDoneToDos();
+            }
+            li.appendChild(deleteFile);
+        }else{
+            let downloadBtn = document.createElement("INPUT");
+            let downloadLabel = document.createElement("label");
+            downloadLabel.className ="fileBtn";
+            downloadBtn.style.display = 'none';
+            downloadBtn.setAttribute("name", "uploadBtn");
+            downloadBtn.setAttribute("type", "file");
+            let downLoadTxt = document.createTextNode("\u21e7");
+            downloadLabel.appendChild(downLoadTxt);
+
+            downloadBtn.id="uploadBtn";
+
+            const onSelectFile = async function () {
+
+                let formData = new FormData();
+                formData.append("file", downloadBtn.files[0]);
+                await fetch(uri + "/file", {
+                    headers:{
+                        'Authorization': 'Bearer '+token
+                    },
+                    method:'POST',
+                    body: formData
+                }).then(result=> result.text()).then(text=> alert(text));
+
+                await showNotDoneToDos()();
+            }
+            downloadBtn.addEventListener('change', onSelectFile, false);
+            downloadLabel.appendChild(downloadBtn);
+            li.appendChild(downloadLabel);
+        }
+        // let edit = document.createElement('span');
+        // let editT = document.createTextNode("E");
+        // edit.className = "edit";
+        // edit.appendChild(editT);
+        // edit.onclick = function(){
+        //     document.getElementById("myUL").style.visibility="hidden";
+        //     let btns = document.getElementsByClassName("addBtn")
+        //     for(let i = 0; i < btns.length; ++i){
+        //         btns[i].style.visibility="hidden";
+        //     }
+        //     document.getElementById("add-button").style.display="none";
+        //     document.getElementById("edit-button").style.display="inline";
+        //     editTodo(uri);
+        //     document.getElementById("myUL").style.visibility="visible";
+        //     for(let i = 0; i < btns.length; ++i){
+        //         btns[i].style.visibility="visible";
+        //     }
+        //     document.getElementById("add-button").style.display="inline";
+        //     document.getElementById("edit-button").style.display="none";
+        //     showAllToDos();
+        // }
+        // li.appendChild(edit);
+    }
+
+
+}
+async function showAllToDos(){
+    let localstorage_user = JSON.parse(localStorage.getItem("user"));
+    let userid = localstorage_user.id;
+    let token = localstorage_user.accessToken;
+
+    let obj;
+    await fetch('http://localhost:8080/'+userid+'/todo', {
+        headers:{
+            'Authorization': 'Bearer '+token
+        },
+        method: 'GET'
+    }).then(result=>result.text()).then(text=>obj=text);
+    let jsObj = JSON.parse(obj);
+
+    let ul = document.getElementById('myUL');
+    ul.innerHTML="";
+    for(let i = 0; i < jsObj.length; ++i){
+        let description = jsObj[i].description;
+        let status = jsObj[i].status;
+        let uri = jsObj[i].uri;
+        let li = document.createElement("li");
+        let t = document.createTextNode(description);
+        li.appendChild(t);
+        let check = document.createElement("SPAN");
+        let checktxt = document.createTextNode("\u2713");
+        if(status==1){
+            li.classList.toggle("checked");
+        }
+        check.className="done"
+        check.appendChild(checktxt);
+        check.onclick = async function (){
+            if(status==1){
+                await fetch(uri + "/notdone", {
+                    headers:{
+                        'Authorization': 'Bearer '+token
+                    },
+                    method: 'PUT'
+                } ).then(result=> result.text()).then(text=>alert(text));
+                await showAllToDos();
+            }else{
+                await fetch(uri + "/done", {
+                    headers:{
+                        'Authorization': 'Bearer '+token
+                    },
+                    method: 'PUT'
+                } ).then(result=> result.text()).then(text=>alert(text));
+                await showAllToDos();
+            }
+        }
+        let remove = document.createElement("SPAN");
+        let txt = document.createTextNode("\u00D7");
+        remove.className = "remove";
+        remove.appendChild(txt);
+        remove.onclick = async function(){
+            await fetch(uri + "/remove",{
+                headers:{
+                    'Authorization': 'Bearer '+token
+                },
+                method: 'PUT'
+            }).then(result=> result.text()).then(text=>alert(text));
+            await showAllToDos();
+        };
+        li.appendChild(check);
+        li.appendChild(remove);
+        ul.appendChild(li);
+        let obj2;
+
+        await fetch( uri + "/file",{
+            headers:{
+                'Authorization': 'Bearer '+token
+            },
+            method: 'GET'
+
+        }).then(result=>result.text()).then(text=>obj2=text).catch((error)=>console.error(error));
+        let jsObj1 = JSON.parse(obj2);
+
+        if(jsObj1.filename!=null){
+
+
+
+            let filename=jsObj1.filename;
+            let url = jsObj1.url;
+            let type = jsObj1.type;
+            let downloadBtn = document.createElement("SPAN");
+            let downLoadTxt = document.createTextNode("\u21e9")
+            downloadBtn.appendChild(downLoadTxt);
+            downloadBtn.className="fileBtn";
+            downloadBtn.onclick =  async function () {
+                window.location.href = url;
+                await showAllToDos();
+            }
+            li.appendChild(downloadBtn);
+            let deleteFile = document.createElement("SPAN");
+            let deleteTxt = document.createTextNode("\u274c")
+            deleteFile.appendChild(deleteTxt);
+            deleteFile.className="deleteFile";
+            deleteFile.onclick =  async function () {
+                fetch(url,{
+                    headers:{
+                        'Authorization': 'Bearer '+token
+                    },
+                    method:'DELETE'
+                }).then(result=>result.text()).then(text=>alert(text));
+                showAllToDos();
+            }
+            li.appendChild(deleteFile);
+        }else{
+            let downloadBtn = document.createElement("INPUT");
+            let downloadLabel = document.createElement("label");
+            downloadLabel.className ="fileBtn";
+            downloadBtn.style.display = 'none';
+            downloadBtn.setAttribute("name", "uploadBtn");
+            downloadBtn.setAttribute("type", "file");
+            let downLoadTxt = document.createTextNode("\u21e7");
+            downloadLabel.appendChild(downLoadTxt);
+
+            downloadBtn.id="uploadBtn";
+
+            const onSelectFile = async function () {
+                let formData = new FormData();
+                formData.append("file", downloadBtn.files[0]);
+                await fetch(uri + "/file", {
+                    headers:{
+                        'Authorization': 'Bearer '+token
+                    },
+                    method:'POST',
+                    body: formData
+                }).then(result=> result.text()).then(text=> alert(text));
+
+                await showAllToDos();
+            }
+            downloadBtn.addEventListener('change', onSelectFile, false);
+            downloadLabel.appendChild(downloadBtn);
+            li.appendChild(downloadLabel);
+        }
+        // let edit = document.createElement('span');
+        // let editT = document.createTextNode("E");
+        // edit.className = "edit";
+        // edit.appendChild(editT);
+        // edit.onclick = function(){
+        //     document.getElementById("myUL").style.visibility="hidden";
+        //     let btns = document.getElementsByClassName("addBtn")
+        //     for(let i = 0; i < btns.length; ++i){
+        //         btns[i].style.visibility="hidden";
+        //     }
+        //     document.getElementById("add-button").style.display="none";
+        //     document.getElementById("edit-button").style.display="inline";
+        //     let edtBtn = document.getElementById("edit-button");
+        //     edtBtn.onclick = async function () {
+        //         let localstorage_user = JSON.parse(localStorage.getItem("user"));
+        //         let token = localstorage_user.accessToken;
+        //
+        //         let newValue = document.getElementById("myInput").value;
+        //
+        //         await fetch(url + "/edit", {
+        //             headers: {
+        //                 'Authorization': 'Bearer ' + token
+        //             },
+        //             method: 'PUT',
+        //             body: newValue
+        //         }).then(result => result.text()).then(text => alert(text));
+        //     }
+        //
+        //     document.getElementById("myUL").style.visibility="visible";
+        //     for(let i = 0; i < btns.length; ++i){
+        //         btns[i].style.visibility="visible";
+        //     }
+        //     document.getElementById("add-button").style.display="inline";
+        //     document.getElementById("edit-button").style.display="none";
+        //     //showAllToDos();
+        // }
+        // li.appendChild(edit);
+
+    }
+
+
+
+
+}
+
+
+</script>
+</html>
