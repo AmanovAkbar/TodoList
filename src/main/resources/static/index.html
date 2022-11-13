@@ -240,9 +240,18 @@
 
 
 </ul>
-<!-- <a href="login.html">log in</a> -->
+<span onclick="logout()" class = "addBtn">Logout</span>
 </body>
 <script>
+async function logout(){
+
+
+
+
+
+    localStorage.removeItem("user");
+    window.location.href='http://localhost:8080/login_register.html'
+}
 async function newElement(){
     let localstorage_user = JSON.parse(localStorage.getItem("user"));
     let userid = localstorage_user.id;

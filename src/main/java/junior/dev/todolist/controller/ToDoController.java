@@ -51,7 +51,7 @@ public class ToDoController {
     public ResponseEntity<List<ResponseToDo>> getToDoList(@PathVariable long userid){
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if(userDetails.getId()!=userid){
-            throw new IllegalArgumentException("You are tryting to access another user's data!");
+            throw new IllegalArgumentException("You are trying to access another user's data!");
         }
         List<ResponseToDo> todos = toDoService.getUserToDo(userid).stream().map(ToDo->{
             String todoApiUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/todo/").path(String.valueOf(ToDo.getId())).toUriString();
@@ -116,12 +116,12 @@ public class ToDoController {
     public ResponseEntity<ResponseFile> getFileInfo(@PathVariable long todoid){
         File file = fileService.getFileByToDoId(todoid);
         if (file == null){
-            System.out.println("file is null");
+            //System.out.println("file is null");
             throw new ResourceNotFoundException("No such file!");
         }
         String fileApiUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/file/").path(String.valueOf(file.getId())).toUriString();
         ResponseFile responseFile = new ResponseFile(file.getFileName(), fileApiUri, file.getType());
-        System.out.println(file.getFileName() + " " + fileApiUri + " " + file.getType());
+        //System.out.println(file.getFileName() + " " + fileApiUri + " " + file.getType());
         return ResponseEntity.status(HttpStatus.OK).body(responseFile);
     }
     //@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")

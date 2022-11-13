@@ -13,6 +13,7 @@ import junior.dev.todolist.security.jwt.JwtUtils;
 import junior.dev.todolist.security.service.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -45,9 +46,10 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
+
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody RequestLogin loginRequest) {
-        System.out.println("in login");
+    public ResponseEntity<ResponseJwt> authenticateUser(@Valid @RequestBody RequestLogin loginRequest) {
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
@@ -58,14 +60,14 @@ public class AuthController {
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
-        System.out.println(userDetails.getId() + " in login2 "+ jwt);
+        //System.out.println(userDetails.getId() + " in login2 "+ jwt);
         return ResponseEntity.ok(new ResponseJwt(jwt,
                 userDetails.getId(),
                 userDetails.getUsername(),
                 roles));
     }
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody RequestSignup signUpRequest) {
+    public ResponseEntity<ResponseMessage> registerUser(@Valid @RequestBody RequestSignup signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
@@ -107,4 +109,5 @@ public class AuthController {
 
         return ResponseEntity.ok(new ResponseMessage("User registered successfully!"));
     }
+
 }
